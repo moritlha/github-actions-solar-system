@@ -80,7 +80,7 @@ jobs:
       permissions:
         packages: write
       runs-on: ubuntu-latest
-      
+
       steps:
         - name: Checkout Repository
           uses: actions/checkout@v4
@@ -93,8 +93,8 @@ jobs:
             password: ${{ secrets.GITHUB_TOKEN }}
         
         - name: Build and push Registry  
-          uses: docker/build-push-action@v5
+          uses: docker/build-push-action@v4
           with:
             context: .  # this '.' means that it's searching for the Docker file in the root director
             push: true
-            tags: ghcr.io/${{ github.repository_owner }}/solar-system:${{ github.sha }}
+            tags: 'ghcr.io/${{ github.repository_owner }}/solar-system:${{ github.sha }}'
