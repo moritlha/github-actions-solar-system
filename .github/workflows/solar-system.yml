@@ -73,3 +73,27 @@ jobs:
             name: Code-Coverage-Result
             path: coverage
             retention-days: 5
+    
+    docker:
+      name: Docker push
+      needs: [unit-testing, code-coverage]
+      permissions:
+        packages: write
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout Repository
+          uses: actions/checkout@v4
+      
+        - name: Login to GitHub Container Registry
+          uses: docker/login-action@v3
+          with:
+            registry: ghcr.io
+            username: ${{ github.repository_owner }}
+            password: ${{ secrets.GITHUB_TOKEN }}
+        
+        - name: Build and push Registry  
+          uses: docker/build-push-action@v5
+          with:
+            context: .  # this '.' means that it's searching for the Docker file in the root director
+            push: true
+            tags: ghcr.io/${{ github.repository_owner }}/solar-system:${{ github.sha }}
