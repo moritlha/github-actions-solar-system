@@ -75,10 +75,10 @@ jobs:
             retention-days: 5
     
     docker:
-      name: Docker push
-      needs: [unit-testing, code-coverage]
       permissions:
         packages: write
+      name: Docker push
+      needs: [unit-testing, code-coverage]
       runs-on: ubuntu-latest
 
       steps:
