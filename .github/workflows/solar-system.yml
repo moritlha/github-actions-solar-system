@@ -102,6 +102,8 @@ jobs:
             tags: 'ghcr.io/${{ github.repository_owner }}/solar-system-test:${{ github.sha }}'
     
     dev-deploy:
+      environment:
+        name: development
       needs: docker
       runs-on: ubuntu-latest
 
