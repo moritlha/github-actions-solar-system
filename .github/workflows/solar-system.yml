@@ -60,7 +60,7 @@ jobs:
         - name: Setup NodeJs 
           uses: actions/setup-node@v3
           with:
-            node-version: 18
+            node-version: 18 
         
         - name: Install NodeJs Dependencies
           run: npm install
@@ -100,3 +100,32 @@ jobs:
             context: .  # this '.' means that it's searching for the Docker file in the root director
             push: true
             tags: 'ghcr.io/${{ github.repository_owner }}/solar-system-test:${{ github.sha }}'
+    
+    dev-deploy:
+      needs: docker
+      runs-on: ubuntu-latest
+
+      steps:
+        - name: Checkout Repository
+          uses: actions/checkout@v4
+
+        - name: Install Kubectl
+          uses: actions/setup-kubectl@v3
+          with:
+            version: 'v1.26.0' 
+        
+        - name: Setup kubecontext
+          uses: actions/k8s-set-context@v3
+          with:
+              method: kubeconfig
+              kubeconfig: ${{ secrets.KUBECONFIG }}
+
+        - name:  Fetch Kubernetes Cluster Details
+          run: |
+            kubectl version --short -o yaml
+            echo  ------------------------------------------------------------------------
+            kubectl get nodes
+
+      
+
+
